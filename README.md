@@ -6,3 +6,11 @@
 > - **DO NOT** run this in production environment
 > - **DO NOT** run without proper protection
 > - It is strongly recommended to use [Aikido Zen](https://www.aikido.dev/zen) as a security layer
+
+# Install
+
+- https://guides.rubyonrails.org/install_ruby_on_rails.html
+
+# Run
+
+`bin/rails server`
