@@ -4,9 +4,6 @@ console_command = '/rails/bin/rails console'
 
 [build]
 
-[env]
-  PORT = '8080'
-
 [processes]
   app = './bin/rails server'
 

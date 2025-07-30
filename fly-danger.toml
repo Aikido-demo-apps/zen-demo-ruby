@@ -5,7 +5,6 @@ console_command = '/rails/bin/rails console'
 [build]
 
 [env]
-  PORT = '8080'
   AIKIDO_DISABLE = 'true'
 
 [processes]
