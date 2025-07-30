@@ -1,0 +1,3 @@
+[submodule "shared-assets"]
+	path = shared-assets
+	url = https://github.com/Aikido-demo-apps/zen-demo-ui
