@@ -1,0 +1,25 @@
+app = 'zen-demo-ruby'
+primary_region = 'ams'
+console_command = '/rails/bin/rails console'
+
+[build]
+
+[env]
+  PORT = '8080'
+
+[processes]
+  app = './bin/rails server'
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = false
+  auto_start_machines = false
+  min_machines_running = 1
+  processes = ['app']
+
+[[vm]]
+  cpus = 1
+  memory = '512mb'
+  cpu_kind = 'shared'
+
