@@ -1,4 +1,4 @@
-app = 'zen-demo-ruby'
+app = 'zen-demo-ruby-danger'
 primary_region = 'ams'
 console_command = '/rails/bin/rails console'
 
