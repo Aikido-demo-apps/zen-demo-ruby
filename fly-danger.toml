@@ -8,7 +8,7 @@ console_command = '/rails/bin/rails console'
   AIKIDO_DISABLE = 'true'
 
 [processes]
-  app = './bin/rails server'
+  app = './bin/rails server --binding 0.0.0.0'
 
 [http_service]
   internal_port = 3000
