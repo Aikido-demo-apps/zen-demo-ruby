@@ -66,8 +66,6 @@ class DemoController < ApplicationController
     end
 
     render json: pets
-  rescue
-    head :internal_server_error
   end
 
   def post_api_create
@@ -77,10 +75,6 @@ class DemoController < ApplicationController
     ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
 
     render plain: 1
-  rescue Aikido::Zen::SQLInjectionError
-    head :internal_server_error
-  rescue
-    head :bad_request and return
   end
 
   # Shell injection
@@ -92,10 +86,6 @@ class DemoController < ApplicationController
     result = system(command)
 
     render plain: result
-  rescue Aikido::Zen::ShellInjectionError
-    head :internal_server_error
-  rescue
-    head :bad_request and return
   end
 
   # SSRF
@@ -113,10 +103,6 @@ class DemoController < ApplicationController
     request = Net::HTTP::Get.new(uri.request_uri)
     response = http.request(request)
     render plain: response.code
-  rescue Aikido::Zen::SSRFDetectedError
-    head :internal_server_error
-  rescue
-    head :bad_request and return
   end
 
   def get_api_read
@@ -129,12 +115,8 @@ class DemoController < ApplicationController
     content = File.read(file_path)
 
     render plain: content
-  rescue Aikido::Zen::PathTraversalError
-    head :internal_server_error
   rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
     head :not_found and return
-  rescue
-    head :bad_request and return
   end
 
   def post_test_llm
