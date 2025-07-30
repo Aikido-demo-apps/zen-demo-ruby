@@ -4,6 +4,9 @@ console_command = '/rails/bin/rails console'
 
 [build]
 
+[env]
+  AIKIDO_BLOCK = 'true'
+
 [processes]
   app = './bin/rails server'
 
