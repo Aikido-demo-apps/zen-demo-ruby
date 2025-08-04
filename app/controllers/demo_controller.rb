@@ -1,3 +1,5 @@
+require "open-uri"
+
 class DemoController < ApplicationController
   # HACK: Disable CSRF token authenticity verification
   skip_before_action :verify_authenticity_token, only: [
@@ -5,6 +7,7 @@ class DemoController < ApplicationController
     :post_api_execute,
     :post_api_request,
     :get_api_read,
+    :get_api_read2,
     :post_test_llm
   ]
 
@@ -105,18 +108,40 @@ class DemoController < ApplicationController
     render plain: response.code
   end
 
+  def post_api_request2
+    data = JSON.parse(request.body.read)
+    url_string = data["url"]
+    content = URI.open(url_string).read
+    render plain: content
+  end
+
   def get_api_read
     path = params[:path]
 
     # Avoid using File.join, so that, if raised, Aikido::Zen::PathTraversalError
     # is raised by File.read.
-    file_path = BLOGS_SHARED_ASSETS.to_s + "/#{path}"
-
+    file_path = Pathname.new(PUBLIC_SHARED_ASSETS) + path
+  
+    puts "file_path: #{file_path}"
     content = File.read(file_path)
 
     render plain: content
   rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-    head :not_found and return
+    # status code should be 500
+    head :internal_server_error and return
+  end
+
+  def get_api_read2
+    path = params[:path]
+ 
+    file_path = File.join(PUBLIC_SHARED_ASSETS, path)
+    puts "file_path: #{file_path}"
+    content = File.read(file_path)
+
+    render plain: content
+  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
+    # status code should be 500
+    head :internal_server_error and return
   end
 
   def post_test_llm

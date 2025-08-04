@@ -47,11 +47,12 @@ Rails.application.routes.draw do
   # SSRF
 
   post "/api/request", to: "demo#post_api_request"
-  post "/api/request2", to: "demo#post_api_request" # Using same method as request1 since we don't need OkHttp
+  post "/api/request2", to: "demo#post_api_request2"
 
   # Path traversal
 
   get "/api/read", to: "demo#get_api_read"
+  get "/api/read2", to: "demo#get_api_read2"
 
   # AI usage
 
