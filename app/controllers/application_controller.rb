@@ -12,4 +12,14 @@ class ApplicationController < ActionController::Base
     file_path = Rails.root.join("shared-assets", *path_parts)
     send_file file_path, disposition: "inline"
   end
+
+  def track_current_user
+    user_id = request.headers["user"]
+    if user_id
+      Aikido::Zen.track_user({
+        id: user_id,
+        name: "User #{user_id}"
+      })
+    end
+  end
 end
