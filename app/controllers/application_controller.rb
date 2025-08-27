@@ -13,13 +13,13 @@ class ApplicationController < ActionController::Base
     send_file file_path, disposition: "inline"
   end
 
-  def track_current_user
+  def authenticate_user!
     user_id = request.headers["user"]
-    if user_id
-      Aikido::Zen.track_user({
-        id: user_id,
-        name: "User #{user_id}"
-      })
-    end
+    return unless user_id
+
+    Aikido::Zen.set_user({
+      id: user_id,
+      name: "User #{user_id}"
+    })
   end
 end
