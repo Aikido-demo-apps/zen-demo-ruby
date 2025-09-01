@@ -1,7 +1,7 @@
 require "open-uri"
 
 class DemoController < ApplicationController
-  before_action :track_current_user
+  before_action :authenticate_user!
 
   # HACK: Disable CSRF token authenticity verification
   skip_before_action :verify_authenticity_token, only: [
