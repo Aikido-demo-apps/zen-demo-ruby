@@ -26,5 +26,8 @@ module ZenDemo
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    require_relative Rails.root.join("lib/middleware/fly_client_ip")
+    config.middleware.insert_before 0, Middleware::FlyClientIp
   end
 end
