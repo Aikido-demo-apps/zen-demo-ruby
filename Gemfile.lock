@@ -1,3 +1,11 @@
+PATH
+  remote: /opt/aikido/src/firewall-ruby
+  specs:
+    aikido-zen (1.0.2.beta.7)
+      concurrent-ruby (~> 1.0)
+      ffi
+      rack
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -74,10 +82,6 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    aikido-zen (1.0.2.beta.2-x86_64-linux)
-      concurrent-ruby (~> 1.0)
-      ffi
-      rack
     ast (2.4.3)
     base64 (0.3.0)
     benchmark (0.4.1)
@@ -295,7 +299,7 @@ PLATFORMS
   x86_64-linux-gnu
 
 DEPENDENCIES
-  aikido-zen (~> 1.0.2.beta.2)
+  aikido-zen (~> 1.0.2.beta.7)!
   bootsnap
   brakeman
   capybara
