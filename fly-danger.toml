@@ -19,6 +19,6 @@ console_command = '/rails/bin/rails console'
   processes = ['app']
 
 [[vm]]
-  memory = '512mb'
+  memory = '2048mb'
   cpu_kind = 'performance'
   cpus = 1
