@@ -8,6 +8,10 @@ class DemoController < ApplicationController
     :post_api_create,
     :post_api_execute,
     :post_api_request,
+    :post_api_request2,
+    :post_api_request_different_port,
+    :post_api_stored_ssrf,
+    :post_api_stored_ssrf_2,
     :get_api_read,
     :get_api_read2,
     :post_test_llm
@@ -149,6 +153,23 @@ class DemoController < ApplicationController
         head :bad_request and return
       end
     end
+  end
+
+  def post_api_stored_ssrf_2
+    # Spawn a background thread that performs SSRF after a delay
+    Thread.new do
+      sleep(10)
+      begin
+        url = 'http://evil-stored-ssrf-hostname/latest/api/token'
+        URI.open(url).read
+      rescue => e
+        # Log the error but don't propagate since we're in a background thread
+        Rails.logger.error("Background SSRF error: #{e.message}")
+      end
+    end
+
+    # Return immediately
+    render plain: "Request successful (Stored SSRF 2 no context)"
   end
 
   def get_api_read
