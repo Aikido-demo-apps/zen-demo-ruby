@@ -48,7 +48,10 @@ Rails.application.routes.draw do
 
   post "/api/request", to: "demo#post_api_request"
   post "/api/request2", to: "demo#post_api_request2"
-
+  
+  post "/api/request_different_port", to: "demo#post_api_request_different_port"
+  
+  post "/api/stored_ssrf", to: "demo#post_api_stored_ssrf"
   # Path traversal
 
   get "/api/read", to: "demo#get_api_read"

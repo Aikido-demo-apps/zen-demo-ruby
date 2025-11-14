@@ -117,6 +117,40 @@ class DemoController < ApplicationController
     render plain: content
   end
 
+
+  def post_api_request_different_port
+    begin
+      data = JSON.parse(request.body.read)
+      url_string = data["url"]
+      port = data["port"]
+      url_string = url_string.sub(/:\d+/, ":#{port}")
+      content = URI.open(url_string).read
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::SSRFDetectedError)
+        render plain: "blocked by aikido", status: :internal_server_error
+      else
+        # 400 status code
+        head :bad_request and return
+      end
+    end
+  end
+
+  def post_api_stored_ssrf
+    begin
+      url = 'http://evil-stored-ssrf-hostname/latest/api/token'
+      content = URI.open(url).read
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::SSRFDetectedError)
+        render plain: "blocked by aikido", status: :internal_server_error
+      else
+        # 400 status code
+        head :bad_request and return
+      end
+    end
+  end
+
   def get_api_read
     path = params[:path]
 
