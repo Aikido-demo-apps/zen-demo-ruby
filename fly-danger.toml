@@ -8,15 +8,7 @@ console_command = '/rails/bin/rails console'
   AIKIDO_DISABLE = 'true'
 
 [processes]
-  app = './bin/rails server --binding 0.0.0.0'
-
-[http_service]
-  internal_port = 3000
-  force_https = true
-  auto_stop_machines = false
-  auto_start_machines = false
-  min_machines_running = 1
-  processes = ['app']
+  app = './bin/rails server'
 
 [[vm]]
   memory = '2048mb'
