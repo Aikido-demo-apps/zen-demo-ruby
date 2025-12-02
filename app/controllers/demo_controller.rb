@@ -92,10 +92,11 @@ class DemoController < ApplicationController
     data = JSON.parse(request.body.read)
     command = data["userCommand"]
 
-    result = system(command)
+    stdout, status = Open3.capture2(command)
 
-    render plain: result
+    render plain: stdout
   end
+
 
   # SSRF
 
