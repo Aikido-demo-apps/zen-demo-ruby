@@ -172,13 +172,11 @@ class DemoController < ApplicationController
     render plain: "Request successful (Stored SSRF 2 no context)"
   end
 
+
   def get_api_read
     path = params[:path]
-
-    # Avoid using File.join, so that, if raised, Aikido::Zen::PathTraversalError
-    # is raised by File.read.
-    file_path = Pathname.new(PUBLIC_SHARED_ASSETS) + path
-  
+ 
+    file_path = File.join(PUBLIC_SHARED_ASSETS, path)
     puts "file_path: #{file_path}"
     content = File.read(file_path)
 
@@ -188,10 +186,14 @@ class DemoController < ApplicationController
     head :internal_server_error and return
   end
 
+
   def get_api_read2
     path = params[:path]
- 
-    file_path = File.join(PUBLIC_SHARED_ASSETS, path)
+
+    # Avoid using File.join, so that, if raised, Aikido::Zen::PathTraversalError
+    # is raised by File.read.
+    file_path = Pathname.new(PUBLIC_SHARED_ASSETS) + path
+  
     puts "file_path: #{file_path}"
     content = File.read(file_path)
 
