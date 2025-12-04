@@ -24,9 +24,9 @@ threads_count = ENV.fetch("RAILS_MAX_THREADS", 3)
 threads threads_count, threads_count
 
 # Specifies the `port` that Puma will listen on to receive requests; default is 3000.
-bind "tcp://[::]:#{port}"
+bind "tcp://[::]:3000"
 # Optional: enable for macOS/dev where IPv6 is v6-only
-bind "tcp://0.0.0.0:#{port}" if ENV["BIND_IPV4"] == "1"
+bind "tcp://0.0.0.0:3000" if ENV["BIND_IPV4"] == "1"
 
 # Allow puma to be restarted by `bin/rails restart` command.
 plugin :tmp_restart
