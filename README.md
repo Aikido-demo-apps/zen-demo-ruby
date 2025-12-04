@@ -14,5 +14,5 @@
 # Run
 
 ```sh
-bin/rails server
+BIND_IPV4=1 bin/rails server
 ```
