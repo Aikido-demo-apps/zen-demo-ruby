@@ -74,7 +74,11 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    aikido-zen (1.0.2-x86_64-linux)
+    aikido-zen (1.0.3-arm64-darwin)
+      concurrent-ruby (~> 1.0)
+      ffi
+      rack
+    aikido-zen (1.0.3-x86_64-linux)
       concurrent-ruby (~> 1.0)
       ffi
       rack
@@ -107,6 +111,7 @@ GEM
     drb (2.2.3)
     erb (5.0.2)
     erubi (1.13.1)
+    ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     globalid (1.2.1)
       activesupport (>= 6.1)
@@ -151,12 +156,15 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.4)
+    nokogiri (1.18.9-arm64-darwin)
+      racc (~> 1.4)
     nokogiri (1.18.9-x86_64-linux-gnu)
       racc (~> 1.4)
     parallel (1.27.0)
     parser (3.3.9.0)
       ast (~> 2.4.1)
       racc
+    pg (1.6.0-arm64-darwin)
     pg (1.6.0-x86_64-linux)
     pp (0.6.2)
       prettyprint
@@ -291,11 +299,12 @@ GEM
     zeitwerk (2.7.3)
 
 PLATFORMS
+  arm64-darwin-24
   x86_64-linux
   x86_64-linux-gnu
 
 DEPENDENCIES
-  aikido-zen (~> 1.0.2)
+  aikido-zen (~> 1.0.3)
   bootsnap
   brakeman
   capybara
