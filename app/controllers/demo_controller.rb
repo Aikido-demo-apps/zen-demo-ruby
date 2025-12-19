@@ -143,8 +143,25 @@ class DemoController < ApplicationController
 
   def post_api_stored_ssrf
     begin
-      url = 'http://evil-stored-ssrf-hostname/latest/api/token'
-      content = URI.open(url).read
+      data = JSON.parse(request.body.read)
+      url_index = data["urlIndex"]
+      if url_index.nil?
+        url_index = 0
+      end
+      urls = [
+        'http://evil-stored-ssrf-hostname/latest/api/token',
+        'http://metadata.google.internal/latest/api/token',
+        'http://metadata.goog/latest/api/token',
+        'http://169.254.169.254/latest/api/token',
+      ]
+      url = urls[url_index % urls.length]
+
+      file = URI.open(url)
+      begin
+        content = file.read
+      ensure
+        file.close
+      end
       render plain: content
     rescue => e
       if e.is_a?(Aikido::Zen::SSRFDetectedError)
