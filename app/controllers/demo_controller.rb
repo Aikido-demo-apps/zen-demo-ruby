@@ -7,7 +7,8 @@ class DemoController < ApplicationController
     :post_api_execute,
     :post_api_request,
     :get_api_read,
-    :post_test_llm
+    :post_test_llm,
+    :get_path
   ]
 
   def root
