@@ -1,4 +1,4 @@
-# zen-demo-ruby
+# zen-demo-ruby (test)
 
 > :warning: **SECURITY WARNING**
 >
