@@ -56,4 +56,4 @@ group :test do
   gem "selenium-webdriver"
 end
 
-gem "aikido-zen", "~> 1.0.7"
+gem "aikido-zen", "~> 1.0.8"
