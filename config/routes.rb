@@ -52,6 +52,7 @@ Rails.application.routes.draw do
   # Path traversal
 
   get "/api/read", to: "demo#get_api_read"
+  get "/api/read2", to: "demo#get_api_read2"
 
   # AI usage
 
