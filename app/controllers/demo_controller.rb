@@ -7,6 +7,7 @@ class DemoController < ApplicationController
     :post_api_execute,
     :post_api_request,
     :get_api_read,
+    :get_api_read2,
     :post_test_llm,
     :get_path
   ]
@@ -118,8 +119,24 @@ class DemoController < ApplicationController
     content = File.read(file_path)
 
     render plain: content
-  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
+  rescue Errno::ENOENT
     head :not_found and return
+  rescue Errno::EACCES, Errno::EISDIR
+    head :internal_server_error and return
+  end
+
+  def get_api_read2
+    path = params[:path]
+
+    file_path = File.join(BLOGS_SHARED_ASSETS.to_s, path)
+
+    content = File.read(file_path)
+
+    render plain: content
+  rescue Errno::ENOENT
+    head :not_found and return
+  rescue Errno::EACCES, Errno::EISDIR
+    head :internal_server_error and return
   end
 
   def post_test_llm
