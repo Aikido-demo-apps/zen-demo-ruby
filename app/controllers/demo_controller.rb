@@ -1,3 +1,5 @@
+require "open-uri"
+
 class DemoController < ApplicationController
   before_action :authenticate_user!
 
@@ -6,6 +8,10 @@ class DemoController < ApplicationController
     :post_api_create,
     :post_api_execute,
     :post_api_request,
+    :post_api_request2,
+    :post_api_request_different_port,
+    :post_api_stored_ssrf,
+    :post_api_stored_ssrf_2,
     :get_api_read,
     :get_api_read2,
     :post_test_llm,
@@ -87,9 +93,9 @@ class DemoController < ApplicationController
     data = JSON.parse(request.body.read)
     command = data["userCommand"]
 
-    result = system(command)
+    stdout, status = Open3.capture2(command)
 
-    render plain: result
+    render plain: stdout
   end
 
   # SSRF
@@ -106,7 +112,79 @@ class DemoController < ApplicationController
 
     request = Net::HTTP::Get.new(uri.request_uri)
     response = http.request(request)
-    render plain: response.code
+
+    if response.is_a?(Net::HTTPRedirection)
+      render plain: "302", status: 302
+    else
+      render plain: response.code, status: response.code.to_i
+    end
+  end
+
+  def post_api_request2
+    data = JSON.parse(request.body.read)
+    url_string = data["url"]
+    content = URI.open(url_string) { |file| file.read }
+    render plain: content
+  end
+
+  def post_api_request_different_port
+    begin
+      data = JSON.parse(request.body.read)
+      url_string = data["url"]
+      port = data["port"]
+      url_string = url_string.sub(/:\d+/, ":#{port}")
+      content = URI.open(url_string) { |file| file.read }
+      render plain: content
+    rescue Aikido::Zen::SSRFDetectedError
+        render plain: "blocked by aikido", status: :internal_server_error
+    rescue
+        # 400 status code
+        head :bad_request and return
+    end
+  end
+
+  def post_api_stored_ssrf
+    begin
+      data = JSON.parse(request.body.read)
+      url_index = data["urlIndex"]
+      if url_index.nil?
+        url_index = 0
+      end
+      urls = [
+        "http://evil-stored-ssrf-hostname/latest/api/token",
+        "http://metadata.google.internal/latest/api/token",
+        "http://metadata.goog/latest/api/token",
+        "http://169.254.169.254/latest/api/token"
+      ]
+      url = urls[url_index % urls.length]
+
+      content = URI.open(url) { |file| file.read }
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::SSRFDetectedError)
+        render plain: "blocked by aikido", status: :internal_server_error
+      else
+        # 400 status code
+        head :bad_request and return
+      end
+    end
+  end
+
+  def post_api_stored_ssrf_2
+    # Spawn a background thread that performs SSRF after a delay
+    Thread.new do
+      sleep(10)
+      begin
+        url = "http://evil-stored-ssrf-hostname/latest/api/token"
+        URI.open(url) { |file| file.read }
+      rescue => e
+        # Log the error but don't propagate since we're in a background thread
+        Rails.logger.error("Background SSRF error: #{e.message}")
+      end
+    end
+
+    # Return immediately
+    render plain: "Request successful (Stored SSRF 2 no context)"
   end
 
   def get_api_read
@@ -119,9 +197,8 @@ class DemoController < ApplicationController
     content = File.read(file_path)
 
     render plain: content
-  rescue Errno::ENOENT
-    head :not_found and return
-  rescue Errno::EACCES, Errno::EISDIR
+  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
+    # status code should be 500
     head :internal_server_error and return
   end
 
@@ -133,9 +210,8 @@ class DemoController < ApplicationController
     content = File.read(file_path)
 
     render plain: content
-  rescue Errno::ENOENT
-    head :not_found and return
-  rescue Errno::EACCES, Errno::EISDIR
+  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
+    # status code should be 500
     head :internal_server_error and return
   end
 
