@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   # Shell injection
 
   post "/api/execute", to: "demo#post_api_execute", format: false
-  # post "/api/execute/<command>", to: "demo#post_api_execute_command" # Unused?
+  get "/api/execute/:command", to: "demo#get_api_execute", format: false
 
   # SSRF
 
