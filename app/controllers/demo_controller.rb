@@ -210,31 +210,41 @@ class DemoController < ApplicationController
   end
 
   def get_api_read
-    path = params[:path]
+    begin
+      path = params[:path]
 
-    # Avoid using File.join, so that, if raised, Aikido::Zen::PathTraversalError
-    # is raised by File.read.
-    file_path = BLOGS_SHARED_ASSETS.to_s + "/#{path}"
+      # Avoid using File.join, so that, if raised, Aikido::Zen::PathTraversalError
+      # is raised by File.read.
+      file_path = BLOGS_SHARED_ASSETS.to_s + "/#{path}"
 
-    content = File.read(file_path)
+      content = File.read(file_path)
 
-    render plain: content
-  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-    # status code should be 500
-    head :internal_server_error and return
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::PathTraversalError)
+        render plain: e.message, status: 500
+      else
+        render plain: e.message, status: 400
+      end
+    end
   end
 
   def get_api_read2
-    path = params[:path]
+    begin
+      path = params[:path]
 
-    file_path = File.join(BLOGS_SHARED_ASSETS.to_s, path)
+      file_path = File.join(BLOGS_SHARED_ASSETS.to_s, path)
 
-    content = File.read(file_path)
+      content = File.read(file_path)
 
-    render plain: content
-  rescue Errno::ENOENT, Errno::EACCES, Errno::EISDIR
-    # status code should be 500
-    head :internal_server_error and return
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::PathTraversalError)
+        render plain: e.message, status: 500
+      else
+        render plain: e.message, status: 400
+      end
+    end
   end
 
   def post_test_llm
