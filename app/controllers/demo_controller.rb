@@ -186,7 +186,7 @@ class DemoController < ApplicationController
     # Return immediately
     render plain: "Request successful (Stored SSRF 2 no context)"
   end
-  
+
   def get_api_read
     begin
       path = params[:path]
