@@ -110,7 +110,7 @@ class DemoController < ApplicationController
     begin
       command = params[:command]
       stdout, status = Open3.capture2(command)
-      render plain: stdout 
+      render plain: stdout
     rescue => e
       if e.is_a?(Aikido::Zen::ShellInjectionError)
         render plain: e.message, status: 500
@@ -119,7 +119,7 @@ class DemoController < ApplicationController
       end
     end
   end
-  
+
   # SSRF
 
   def post_api_request
