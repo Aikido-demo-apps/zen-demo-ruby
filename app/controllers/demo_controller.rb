@@ -1,4 +1,5 @@
 require "open-uri"
+require "open3"
 
 class DemoController < ApplicationController
   before_action :authenticate_user!
@@ -7,6 +8,7 @@ class DemoController < ApplicationController
   skip_before_action :verify_authenticity_token, only: [
     :post_api_create,
     :post_api_execute,
+    :get_api_execute,
     :post_api_request,
     :post_api_request2,
     :post_api_request_different_port,
@@ -90,14 +92,34 @@ class DemoController < ApplicationController
   # Shell injection
 
   def post_api_execute
-    data = JSON.parse(request.body.read)
-    command = data["userCommand"]
-
-    stdout, status = Open3.capture2(command)
-
-    render plain: stdout
+    begin
+      data = JSON.parse(request.body.read)
+      command = data["userCommand"]
+      stdout, status = Open3.capture2(command)
+      render plain: stdout
+    rescue => e
+      if e.is_a?(Aikido::Zen::ShellInjectionError)
+        render plain: e.message, status: 500
+      else
+        render plain: e.message, status: 400
+      end
+    end
   end
 
+  def get_api_execute
+    begin
+      command = params[:command]
+      stdout, status = Open3.capture2(command)
+      render plain: stdout 
+    rescue => e
+      if e.is_a?(Aikido::Zen::ShellInjectionError)
+        render plain: e.message, status: 500
+      else
+        render plain: e.message, status: 400
+      end
+    end
+  end
+  
   # SSRF
 
   def post_api_request
