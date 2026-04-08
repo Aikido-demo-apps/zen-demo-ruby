@@ -57,3 +57,5 @@ group :test do
 end
 
 gem "aikido-zen", "~> 1.1.1"
+
+gem 'rack', '>= 3.1.20'
