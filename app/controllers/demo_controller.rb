@@ -270,7 +270,9 @@ class DemoController < ApplicationController
   end
 
   def get_api_idor2
-    ActiveRecord::Base.connection.execute("SELECT * FROM pets WHERE tenant_id=1")
+    Aikido::Zen.set_tenant_id(1)
+
+    ActiveRecord::Base.connection.execute("SELECT * FROM pets")
 
     render plain: "OK"
   end
