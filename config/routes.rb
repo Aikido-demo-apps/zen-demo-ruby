@@ -63,6 +63,12 @@ Rails.application.routes.draw do
 
   post "/test_llm", to: "demo#post_test_llm", format: false
 
+  # IDOR protection
+
+  get "/api/idor_1", to: "demo#get_api_idor1", format: false
+  get "/api/idor_2", to: "demo#get_api_idor2", format: false
+  get "/api/idor_3", to: "demo#get_api_idor3", format: false
+
   # Serve static files from shared-assets/public/*
   get "/*path", to: "demo#get_path", format: false
 end

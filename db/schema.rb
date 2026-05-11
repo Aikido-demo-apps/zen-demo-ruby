@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 0) do
+ActiveRecord::Schema[7.2].define(version: 2026_05_11_092659) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "pets", primary_key: "pet_id", id: :serial, force: :cascade do |t|
     t.string "pet_name", limit: 250, null: false
     t.string "owner", limit: 250, null: false
+    t.integer "tenant_id"
   end
 end

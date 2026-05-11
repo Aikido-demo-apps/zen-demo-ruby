@@ -15,14 +15,14 @@ class ApplicationController < ActionController::Base
 
   def authenticate_user!
     if request.headers["user"]
-      Aikido::Zen.set_user({
+      Aikido::Zen.set_user(
         id: request.headers["user"]
-      })
+      )
     elsif request.headers["x-user-id"] && request.headers["x-user-name"]
-      Aikido::Zen.set_user({
+      Aikido::Zen.set_user(
         id: request.headers["x-user-id"],
         name: request.headers["x-user-name"]
-      })
+      )
     end
   end
 end

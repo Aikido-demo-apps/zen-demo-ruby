@@ -17,6 +17,9 @@ class DemoController < ApplicationController
     :get_api_read,
     :get_api_read2,
     :post_test_llm,
+    :get_api_idor1,
+    :get_api_idor2,
+    :get_api_idor1,
     :get_path
   ]
 
@@ -60,14 +63,19 @@ class DemoController < ApplicationController
   # SQL injection
 
   def get_clear
-    ActiveRecord::Base.connection.execute("DELETE FROM pets")
+    Aikido::Zen.without_idor_protection do
+      ActiveRecord::Base.connection.execute("DELETE FROM pets")
+    end
+
     render plain: "Cleared successfully."
   end
 
   def get_api_pets
     pets = []
 
-    rows = ActiveRecord::Base.connection.execute("SELECT * FROM pets")
+    rows = Aikido::Zen.without_idor_protection do
+      ActiveRecord::Base.connection.execute("SELECT * FROM pets")
+    end
 
     rows.each do |row|
       pets << {
@@ -84,7 +92,9 @@ class DemoController < ApplicationController
     data = JSON.parse(request.body.read)
     name = data["name"]
 
-    ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
+    Aikido::Zen.without_idor_protection do
+      ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
+    end
 
     render plain: 1
   end
@@ -249,6 +259,28 @@ class DemoController < ApplicationController
 
   def post_test_llm
     render plain: "Demo feature not implemented"
+  end
+
+  def get_api_idor1
+    Aikido::Zen.set_tenant_id(1)
+
+    ActiveRecord::Base.connection.execute("SELECT * FROM pets WHERE tenant_id=1")
+
+    render plain: "OK"
+  end
+
+  def get_api_idor2
+    ActiveRecord::Base.connection.execute("SELECT * FROM pets WHERE tenant_id=1")
+
+    render plain: "OK"
+  end
+
+  def get_api_idor3
+    Aikido::Zen.without_idor_protection do
+      ActiveRecord::Base.connection.execute("SELECT * FROM pets")
+    end
+
+    render plain: "OK"
   end
 
   def get_path
