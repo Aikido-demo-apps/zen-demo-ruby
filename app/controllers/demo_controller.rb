@@ -176,7 +176,10 @@ class DemoController < ApplicationController
         "http://evil-stored-ssrf-hostname/latest/api/token",
         "http://metadata.google.internal/latest/api/token",
         "http://metadata.goog/latest/api/token",
-        "http://169.254.169.254/latest/api/token"
+        "http://169.254.169.254/latest/api/token",
+        "http://evil-stored-ssrf-hostname./latest/api/token",
+        "http://metadata.google.internal./latest/api/token",
+        "http://metadata.goog./latest/api/token"
       ]
       url = urls[url_index % urls.length]
 
