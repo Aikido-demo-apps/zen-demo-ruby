@@ -24,5 +24,8 @@ class ApplicationController < ActionController::Base
         name: request.headers["x-user-name"]
       )
     end
+
+    tenant_id = request.headers["X-Tenant-ID"] || "default_tenant"
+    Aikido::Zen.set_tenant_id(tenant_id)
   end
 end

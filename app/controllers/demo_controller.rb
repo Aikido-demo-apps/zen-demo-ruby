@@ -17,9 +17,9 @@ class DemoController < ApplicationController
     :get_api_read,
     :get_api_read2,
     :post_test_llm,
-    :get_api_idor1,
-    :get_api_idor2,
-    :get_api_idor1,
+    :get_api_idor_safe,
+    :get_api_idor_unsafe,
+    :get_api_idor_bypassed,
     :get_path
   ]
 
@@ -96,7 +96,7 @@ class DemoController < ApplicationController
       ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
     end
 
-    render plain: 1
+    render plain: "Success!"
   end
 
   # Shell injection
@@ -261,28 +261,30 @@ class DemoController < ApplicationController
     render plain: "Demo feature not implemented"
   end
 
-  def get_api_idor1
-    Aikido::Zen.set_tenant_id(1)
-
-    ActiveRecord::Base.connection.execute("SELECT * FROM pets WHERE tenant_id=1")
-
-    render plain: "OK"
+  def get_api_idor_safe
+    tenant_id = request.headers["X-Tenant-ID"] || "default_tenant"
+    rows = ActiveRecord::Base.connection.execute(
+      ActiveRecord::Base.sanitize_sql(["SELECT * FROM pets WHERE tenant_id = ?", tenant_id])
+    )
+    render json: { success: true, pets: rows.to_a }
+  rescue => e
+    render json: { success: false, output: e.message }, status: 500
   end
 
-  def get_api_idor2
-    Aikido::Zen.set_tenant_id(1)
-
-    ActiveRecord::Base.connection.execute("SELECT * FROM pets")
-
-    render plain: "OK"
+  def get_api_idor_unsafe
+    rows = ActiveRecord::Base.connection.execute("SELECT * FROM pets")
+    render json: { success: true, pets: rows.to_a }
+  rescue => e
+    render json: { success: false, output: e.message }, status: 500
   end
 
-  def get_api_idor3
-    Aikido::Zen.without_idor_protection do
+  def get_api_idor_bypassed
+    rows = Aikido::Zen.without_idor_protection do
       ActiveRecord::Base.connection.execute("SELECT * FROM pets")
     end
-
-    render plain: "OK"
+    render json: { success: true, pets: rows.to_a }
+  rescue => e
+    render json: { success: false, output: e.message }, status: 500
   end
 
   def get_path

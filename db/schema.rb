@@ -17,6 +17,6 @@ ActiveRecord::Schema[7.2].define(version: 2026_05_11_092659) do
   create_table "pets", primary_key: "pet_id", id: :serial, force: :cascade do |t|
     t.string "pet_name", limit: 250, null: false
     t.string "owner", limit: 250, null: false
-    t.integer "tenant_id"
+    t.string "tenant_id"
   end
 end
