@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   get "/clear", to: "demo#get_clear", format: false
   get "/api/pets/", to: "demo#get_api_pets", format: false
   post "/api/create", to: "demo#post_api_create", format: false
+  post "/api/create-form", to: "demo#post_api_create_form", format: false
 
   # Shell injection
 

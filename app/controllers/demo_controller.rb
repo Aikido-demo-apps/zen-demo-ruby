@@ -7,6 +7,7 @@ class DemoController < ApplicationController
   # HACK: Disable CSRF token authenticity verification
   skip_before_action :verify_authenticity_token, only: [
     :post_api_create,
+    :post_api_create_form,
     :post_api_execute,
     :get_api_execute,
     :post_api_request,
@@ -87,6 +88,14 @@ class DemoController < ApplicationController
     ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
 
     render plain: 1
+  end
+
+  def post_api_create_form
+    name = params[:name]
+
+    ActiveRecord::Base.connection.execute("INSERT INTO pets (pet_name, owner) VALUES ('#{name}', 'Aikido Security')")
+
+    render plain: "Success!"
   end
 
   # Shell injection
