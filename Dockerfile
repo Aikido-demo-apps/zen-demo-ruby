@@ -27,7 +27,7 @@ FROM base AS build
 
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install -y build-essential git libyaml-dev libpq-dev pkg-config procps strace && \
+    apt-get install --no-install-recommends -y build-essential git libyaml-dev libpq-dev pkg-config && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
@@ -50,6 +50,14 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
+
+# Install additional debug packages
+RUN apt-get update -qq && \
+    apt-get install -y procps strace htop && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+
+RUN curl -Lo /tmp/rbspy.tar.gz https://github.com/rbspy/rbspy/releases/latest/download/rbspy-x86_64-unknown-linux-musl.tar.gz \
+    tar -xzf /tmp/rbspy.tar.gz -C /usr/local/bin
 
 # Copy built artifacts: gems, application
 COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
