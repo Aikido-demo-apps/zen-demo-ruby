@@ -56,7 +56,7 @@ RUN apt-get update -qq && \
     apt-get install -y procps strace htop && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
-RUN curl -Lo /tmp/rbspy.tar.gz https://github.com/rbspy/rbspy/releases/latest/download/rbspy-x86_64-unknown-linux-musl.tar.gz \
+RUN curl -Lo /tmp/rbspy.tar.gz https://github.com/rbspy/rbspy/releases/latest/download/rbspy-x86_64-unknown-linux-musl.tar.gz && \
     tar -xzf /tmp/rbspy.tar.gz -C /usr/local/bin
 
 # Copy built artifacts: gems, application
