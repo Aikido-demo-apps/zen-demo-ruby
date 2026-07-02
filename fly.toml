@@ -6,7 +6,6 @@ console_command = '/rails/bin/rails console'
 
 [env]
   AIKIDO_BLOCK = 'true'
-  AIKIDO_DISABLE = 'true'
 
 [processes]
   app = './bin/rails server'
