@@ -59,6 +59,7 @@ Rails.application.routes.draw do
 
   get "/api/read", to: "demo#get_api_read", format: false
   get "/api/read2", to: "demo#get_api_read2", format: false
+  get "/api/read3", to: "demo#get_api_read3", format: false
 
   # AI usage
 
