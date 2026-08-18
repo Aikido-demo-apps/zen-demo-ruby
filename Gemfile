@@ -57,3 +57,23 @@ group :test do
 end
 
 gem "aikido-zen", "~> 1.7.2"
+
+gem "activestorage", ">= 7.2.3.2"
+
+gem "nokogiri", ">= 1.19.4"
+
+gem "rack-session", ">= 2.1.2"
+
+gem "erb", ">= 6.0.5"
+
+gem "json", ">= 2.19.8"
+
+gem "psych", ">= 5.4.0"
+
+gem "msgpack", ">= 1.8.4"
+
+gem "websocket-driver", ">= 0.8.2"
+
+gem "loofah", ">= 2.25.2"
+
+gem "rails-html-sanitizer", ">= 1.7.1"
