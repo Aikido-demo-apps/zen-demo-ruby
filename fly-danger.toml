@@ -6,6 +6,7 @@ console_command = '/rails/bin/rails console'
 
 [env]
   AIKIDO_DISABLE = 'true'
+  AIKIDO_CLIENT_IP_HEADER = 'HTTP_FLY_CLIENT_IP'
 
 [processes]
   app = './bin/rails server'
