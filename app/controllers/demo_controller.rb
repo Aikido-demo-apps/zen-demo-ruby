@@ -17,6 +17,7 @@ class DemoController < ApplicationController
     :post_api_stored_ssrf_2,
     :get_api_read,
     :get_api_read2,
+    :get_api_read3,
     :post_test_llm,
     :get_path
   ]
@@ -246,6 +247,24 @@ class DemoController < ApplicationController
       path = params[:path]
 
       file_path = File.join(BLOGS_SHARED_ASSETS.to_s, path)
+
+      content = File.read(file_path)
+
+      render plain: content
+    rescue => e
+      if e.is_a?(Aikido::Zen::PathTraversalError)
+        render plain: e.message, status: 500
+      else
+        render plain: e.message, status: 400
+      end
+    end
+  end
+
+  def get_api_read3
+    begin
+      path = params[:path]
+
+      file_path = File.expand_path(path, BLOGS_SHARED_ASSETS.to_s)
 
       content = File.read(file_path)
 
