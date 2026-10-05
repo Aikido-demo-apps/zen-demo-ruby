@@ -14,6 +14,11 @@ class ApplicationController < ActionController::Base
   end
 
   def authenticate_user!
+    rate_limiting_group = cookies["RateLimitingGroupID"]
+    unless rate_limiting_group.nil?
+      Aikido::Zen.set_rate_limiting_group(rate_limiting_group)
+    end
+
     if request.headers["user"]
       Aikido::Zen.set_user({
         id: request.headers["user"]
