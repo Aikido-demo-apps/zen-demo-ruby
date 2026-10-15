@@ -1,4 +1,4 @@
-source "https://rubygems.org"
+source "https://rubygems.org" 
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.2.2", ">= 7.2.2.1"
@@ -57,3 +57,21 @@ group :test do
 end
 
 gem "aikido-zen", "~> 1.9.0"
+
+gem "activestorage", ">= 7.2.3.2"
+
+gem "rack-session", ">= 2.1.2"
+
+gem "json", ">= 2.19.8"
+
+gem "psych", ">= 5.4.0"
+
+gem "msgpack", ">= 1.8.4"
+
+gem "websocket-driver", ">= 0.8.2"
+
+gem "nokogiri", ">= 1.19.4"
+
+gem "loofah", ">= 2.25.2"
+
+gem "rails-html-sanitizer", ">= 1.7.1"
