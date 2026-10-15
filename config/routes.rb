@@ -32,6 +32,7 @@ Rails.application.routes.draw do
   # User blocking
 
   get "/test_user_blocking", to: "demo#get_test_user_blocking", format: false
+  get "/api/custom-event", to: "demo#get_custom_event", format: false
 
   # SQL injection
 

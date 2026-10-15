@@ -58,6 +58,17 @@ class DemoController < ApplicationController
     render plain: "Hello User with id: #{user_id}"
   end
 
+  def get_custom_event
+    count = Integer(params.fetch(:count, "1"), 10, exception: false)
+    unless count && count.between?(1, 100)
+      render plain: "count must be an integer between 1 and 100", status: :bad_request
+      return
+    end
+
+    count.times { Aikido::Zen.track("user.login_failed") }
+    render plain: "Events tracked"
+  end
+
   # SQL injection
 
   def get_clear
