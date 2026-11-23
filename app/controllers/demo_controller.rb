@@ -216,15 +216,18 @@ class DemoController < ApplicationController
   end
 
   def post_api_stored_ssrf_2
-    # Spawn a background thread that performs SSRF after a delay
-    Thread.new do
-      sleep(10)
-      begin
-        url = "http://evil-stored-ssrf-hostname/latest/api/token"
-        URI.open(url) { |file| file.read }
-      rescue => e
-        # Log the error but don't propagate since we're in a background thread
-        Rails.logger.error("Background SSRF error: #{e.message}")
+    # Threads inherit the context of the request, so the thread is started without one.
+    Aikido::Zen.without_context do
+      # Spawn a background thread that performs SSRF after a delay.
+      Thread.new do
+        sleep(10)
+        begin
+          url = "http://evil-stored-ssrf-hostname/latest/api/token"
+          URI.open(url) { |file| file.read }
+        rescue => e
+          # Log the error but don't propagate since we're in a background thread
+          Rails.logger.error("Background SSRF error: #{e.message}")
+        end
       end
     end
 
